@@ -31,3 +31,15 @@ python src\compare_results.py
 ```
 
 报告保存在 `outputs/comparison_report.md`。
+
+## 一键运行第二阶段核心流程
+
+确认 `data/test.jpg` 已准备好、`mobile_sam.pt` 已下载后，可以执行：
+
+```powershell
+python src\run_stage2.py
+```
+
+程序会依次运行 YOLO 检测、Mobile-SAM 分割、视觉大模型问答和结果对比报告。
+视觉大模型需要 `.env` 中的 API 配置；如果网络或额度暂时不可用，本地检测和分割结果仍会保留。
+
