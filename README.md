@@ -21,3 +21,13 @@ python src\vision_qa.py
 ```
 
 结果保存在 `outputs/vision_qa/`。`.env` 只在本机使用，不要提交到 Git。
+
+## 生成两种方案的对比报告
+
+在 YOLO、SAM 和视觉大模型都运行过后，执行：
+
+```powershell
+python src\compare_results.py
+```
+
+报告保存在 `outputs/comparison_report.md`。
