@@ -133,3 +133,6 @@ http://localhost/
 Nginx 会把请求转发到 FastAPI，并将图片上传限制设置为 20 MB。生产环境中可继续在
 Nginx 层配置 HTTPS 证书和域名。
 
+云服务器镜像使用 `opencv-python-headless`，不需要额外安装桌面图形库，因此 Docker
+构建不会依赖 Debian 的 `apt-get` 软件源，适合无桌面的 Linux ECS 环境。
+
