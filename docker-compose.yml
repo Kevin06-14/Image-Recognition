@@ -1,0 +1,16 @@
+services:
+  image-recognition:
+    build: .
+    container_name: image-recognition-stage3
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./models:/app/models:ro
+      # 权重文件不提交到 Git，放在项目根目录后以只读方式挂载。
+      - ./yolo11n.pt:/app/yolo11n.pt:ro
+      - ./mobile_sam.pt:/app/mobile_sam.pt:ro
+    restart: unless-stopped

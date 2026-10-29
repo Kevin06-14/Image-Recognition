@@ -5,6 +5,8 @@ __pycache__/
 data/
 models/
 outputs/
+data/db/
+data/web_uploads/
 *.pt
 *.pth
 *.onnx
