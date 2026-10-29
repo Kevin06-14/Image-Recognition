@@ -13,4 +13,21 @@ services:
       # 权重文件不提交到 Git，放在项目根目录后以只读方式挂载。
       - ./yolo11n.pt:/app/yolo11n.pt:ro
       - ./mobile_sam.pt:/app/mobile_sam.pt:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: image-recognition-nginx
+    depends_on:
+      image-recognition:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped

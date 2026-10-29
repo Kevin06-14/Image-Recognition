@@ -10,3 +10,6 @@ data/web_uploads/
 *.pt
 *.pth
 *.onnx
+
+docker-install/
+docker-data/

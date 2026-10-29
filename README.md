@@ -113,3 +113,23 @@ docker compose down
 上传图片、SQLite 数据库和分析结果通过目录挂载保存在宿主机的 `data/` 和 `outputs/`
 中；容器删除后数据仍然保留。Windows 本地没有 Docker 时，可在 Linux 服务器上执行相同命令。
 
+健康检查地址：
+
+```text
+http://localhost:8000/health
+```
+
+返回 `{"status":"ok", ...}` 表示 API 进程已经正常启动。Docker Compose 也会定期调用这个
+地址并显示容器健康状态。
+
+### Nginx 反向代理
+
+Compose 还包含一个 Nginx 服务。启动后可以通过以下地址访问：
+
+```text
+http://localhost/
+```
+
+Nginx 会把请求转发到 FastAPI，并将图片上传限制设置为 20 MB。生产环境中可继续在
+Nginx 层配置 HTTPS 证书和域名。
+

@@ -38,6 +38,12 @@ class Account(BaseModel):
     password: str
 
 
+@app.get("/health")
+def health() -> dict:
+    """Lightweight endpoint for Docker and reverse-proxy health checks."""
+    return {"status": "ok", "service": "image-recognition-stage3"}
+
+
 def current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> str:
@@ -95,6 +101,12 @@ async function account(path){
   if(data.access_token){token=data.access_token;localStorage.setItem("stage3_token",token);}
   document.getElementById("authStatus").textContent="登录成功，可以开始分析。";
 }
+async function loadProtectedImage(url, elementId){
+  const response=await fetch(url,{headers:{"Authorization":"Bearer "+token}});
+  if(!response.ok) throw new Error("分割结果图片读取失败："+response.status);
+  const blob=await response.blob();
+  document.getElementById(elementId).src=URL.createObjectURL(blob);
+}
 document.getElementById("register").onclick=()=>account("/api/register").catch(e=>
   document.getElementById("authStatus").textContent="错误："+e.message);
 document.getElementById("login").onclick=()=>account("/api/login").catch(e=>
@@ -111,8 +123,10 @@ form.addEventListener("submit",async (event)=>{
     if(!response.ok) throw new Error(data.detail||"分析失败");
     document.getElementById("detections").textContent=
       JSON.stringify(data.detections,null,2);
-    document.getElementById("overlay").src=data.overlay_url;
-    document.getElementById("mask").src=data.mask_url;
+    await Promise.all([
+      loadProtectedImage(data.overlay_url,"overlay"),
+      loadProtectedImage(data.mask_url,"mask")
+    ]);
     document.getElementById("vision").textContent=data.vision_answer;
     document.getElementById("result").hidden=false;
     status.textContent="分析完成。";
